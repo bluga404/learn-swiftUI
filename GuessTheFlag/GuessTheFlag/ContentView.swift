@@ -16,6 +16,11 @@ struct ContentView: View {
     @State private var showingScore = false
     @State private var scoreTitle = ""
     
+    @State private var score = 0
+    
+    @State private var counter = 0
+    @State private var gameIsOver = false
+    
     var body: some View {
         ZStack {
             RadialGradient(stops: [
@@ -25,23 +30,24 @@ struct ContentView: View {
                 .ignoresSafeArea()
 
             VStack {
-                Spacer() // Mendorong konten ke tengah
+                Spacer()
 
                 Text("Guess the Flag")
                     .font(.largeTitle.weight(.bold))
                     .foregroundStyle(.white)
+                
+                Spacer()
 
                 VStack(spacing: 15) {
                     VStack {
                         Text("Tap the flag of")
-                            .foregroundStyle(.secondary) // Menggunakan secondary agar kontras
+                            .foregroundStyle(.primary)
                             .font(.subheadline.weight(.heavy))
 
-                        Text(countries[correctAnswer].uppercased()) // Uppercase agar lebih rapi
+                        Text(countries[correctAnswer].uppercased())
                             .font(.largeTitle.weight(.semibold))
                     }
 
-                    // Pindahkan bendera ke dalam box material ini
                     ForEach(0..<3) { number in
                         Button {
                             flagTapped(number)
@@ -58,31 +64,53 @@ struct ContentView: View {
                 .clipShape(.rect(cornerRadius: 20))
 
                 Spacer()
-                Spacer() // Memberi ruang ekstra di bawah
-
-                Text("Score: ???")
-                    .foregroundStyle(.white) // Putih lebih terbaca di background gelap
+                
+                Text("Score: \(score)")
+                    .foregroundStyle(.white)
                     .font(.title.bold())
                 
-                Spacer()
             }
             .padding()
         }
         .alert(scoreTitle, isPresented: $showingScore) {
             Button("Continue", action: askQuestion)
         } message: {
-            Text("Your score is ???")
+            Text("Your score is \(score)")
+        }
+        
+        .alert("Well Done!", isPresented: $gameIsOver){
+            Button("Reset Game", action:resetGame)
+        } message: {
+            Text("Your Final Score is \(score) / 8")
         }
     }
     
     func flagTapped(_ number: Int) {
+        counter += 1
+        
         if number == correctAnswer {
             scoreTitle = "Correct"
+            score += 1
         } else {
-            scoreTitle = "Wrong"
+            scoreTitle = "Wrong, that is the flag of \(countries[number].capitalized)"
+            if(score>1){
+                score -= 1
+            }else{
+                score = 0
+            }
         }
-
-        showingScore = true
+        
+        if(counter==8){
+            gameIsOver = true
+        }else{
+            showingScore = true
+        }
+    }
+    
+    func resetGame() {
+        score = 0
+        counter = 0
+        askQuestion()
     }
     
     func askQuestion() {
