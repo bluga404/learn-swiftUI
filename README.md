@@ -27,8 +27,4 @@ Game Rules:
 [Full Code Here](./GuessTheFlag/)\
 This is the final App Recording.
 
-<div align="center">
-  <video src="./GuessTheFlag/ScreenRecording_03-27-2026 22-36-09_1.MP4" width="300" controls>
-   Your browser does not support the video tag.
-  </video>
-</div>
+![App Demo](./GuessTheFlag/gif.gif)
