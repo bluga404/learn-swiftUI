@@ -23,37 +23,48 @@ struct ContentView: View {
                 .init(color: Color(red: 0.76, green: 0.15, blue: 0.26), location: 0.3),
             ], center: .top, startRadius: 200, endRadius: 400)
                 .ignoresSafeArea()
-            VStack {
-                Text("Guess the Flag")
-                        .font(.largeTitle.weight(.bold))
-                        .foregroundStyle(.white)
-                VStack(spacing: 15) {
-                    Text("Tap the flag of")
-                        .foregroundStyle(.white)
-                        .font(.subheadline.weight(.heavy))
 
-                    Text(countries[correctAnswer])
-                        .foregroundStyle(.white)
-                        .font(.largeTitle.weight(.semibold))
+            VStack {
+                Spacer() // Mendorong konten ke tengah
+
+                Text("Guess the Flag")
+                    .font(.largeTitle.weight(.bold))
+                    .foregroundStyle(.white)
+
+                VStack(spacing: 15) {
+                    VStack {
+                        Text("Tap the flag of")
+                            .foregroundStyle(.secondary) // Menggunakan secondary agar kontras
+                            .font(.subheadline.weight(.heavy))
+
+                        Text(countries[correctAnswer].uppercased()) // Uppercase agar lebih rapi
+                            .font(.largeTitle.weight(.semibold))
+                    }
+
+                    // Pindahkan bendera ke dalam box material ini
+                    ForEach(0..<3) { number in
+                        Button {
+                            flagTapped(number)
+                        } label: {
+                            Image(countries[number])
+                                .clipShape(.capsule)
+                                .shadow(radius: 5)
+                        }
+                    }
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 20)
                 .background(.regularMaterial)
                 .clipShape(.rect(cornerRadius: 20))
-                
-                Text("Score: ???")
-                    .foregroundStyle(.secondary)
-                    .font(.title.bold())
 
-                ForEach(0..<3) { number in
-                    Button {
-                        flagTapped(number)
-                    } label: {
-                        Image(countries[number])
-                            .clipShape(.capsule)
-                            .shadow(radius: 5)
-                    }
-                }
+                Spacer()
+                Spacer() // Memberi ruang ekstra di bawah
+
+                Text("Score: ???")
+                    .foregroundStyle(.white) // Putih lebih terbaca di background gelap
+                    .font(.title.bold())
+                
+                Spacer()
             }
             .padding()
         }
